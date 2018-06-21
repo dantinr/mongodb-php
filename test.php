@@ -54,7 +54,27 @@ class MongoTest
 	}
 
 
+	/**
+	 * 嵌套查询
+	 * 2018年06月21日11:05:52
+	 * @return \MongoDB\Driver\Cursor
+	 * dante
+	 */
+	public function embeddedSearch()
+	{
 
+		$fields = ['id'=>1,'order_sub_id'=>1,'order_id'=>1,'master_order_id'=>1];		// 获取字段
+		$projection = [
+			'projection'	=> $fields
+		];
+
+		$where = [
+			'receive_info.email'	=> 'lh_ts24@qq.com'			// receive_info 为 Object  使用单引号
+		];
+
+		return $this->collection->find($where,$projection);
+
+	}
 
 
 
@@ -66,6 +86,14 @@ $collection = 'order_info';
 $m = new MongoTest($db,$collection);
 $dbs = $m->listDb();
 //echo '<pre>';print_r($dbs);echo '</pre>';echo '<hr>';
+
+
+//嵌套查询
+$many = $m->embeddedSearch();
+foreach($many as $k=>$v){
+	echo '<pre>';print_r($v);echo '</pre>';
+}
+die;
 
 
 //查询一条记录
